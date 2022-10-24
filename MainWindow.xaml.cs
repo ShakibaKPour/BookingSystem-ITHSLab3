@@ -21,16 +21,26 @@ namespace CSLab3
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Bookings> bookingList = new List<Bookings>();
-        List<Tables> table = new List<Tables>();
-        //List<TimeOnly> timeOnlyList = new List<TimeOnly>();
+        DateTime date;
 
+        List<Bookings> bookingList = new List<Bookings>();
+
+        List<Tables> table = new List<Tables>();
+        List<Table> availableTableList = new List<Table>();
+        List<Table> bookedTableList = new List<Table>();
+
+        List <DateTime> availablDates = new List<DateTime>();
+        List <DateTime> bookedDates = new List<DateTime>();
+
+        List<string> availableHours = new List<string>();
+        List<string> bookedHours = new List<string>();
+        
         public MainWindow()
         {
             InitializeComponent();
-            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", new DateTime(2022,11,10, 19, 00, 00)));
-            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", new DateTime(2022, 11, 14, 19, 00, 00)));
-            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", new DateTime(2022, 11, 10, 19, 00, 00)));
+            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19"));
+            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20"));
+            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18"));
             BookingWindowContent();
             table.Add(new Tables("1"));
             table.Add(new Tables("2"));
@@ -48,10 +58,13 @@ namespace CSLab3
         {
             foreach(var booking in bookingList)
             {
-                servingWindow.Text += booking.Name + booking.DateTime.ToString()
+                servingWindow.Text += "Namn: " + booking.Name + " , Datum: " + booking.DateTime.ToShortDateString()
+                    + " , Kl. "+ booking.Time + " , Bord N.: "
                     + booking.TableNumber  + "\n";
             }
             return servingWindow.Text;
+
+            //here I can add it to a fil and then return the file content?
         }
 
         public void TableListCBContent()
@@ -66,32 +79,61 @@ namespace CSLab3
         {
             for (int i = 11; i < 22; i++)
             {
-                timepicker.Items.Add(i + ".00");
-                // or
-                //comboBox1.Items.Add(i.ToString("00")); // to get 00, 01, 02 
+                timepicker.Items.Add(i.ToString() + ".00"); ;
+                
             }
-        }
-        private void datepicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //BookingList.date property- add to the list of bookings and blockout the date
-        }
-
-        void AddToBookingList()
-        {
-            string name=customerName.Text;
-            DateTime date=datepicker.DisplayDate;
-            //int tableNum=ComboBox
-
-            //bookingList.Add(new Bookings(name, date, Table number, time));
         }
 
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
-            string Name= customerName.Text;
-            var date=datepicker.DisplayDate;
-            var tableNumber = TableNumCB.Items;
+            //var currentBooking=bookingList.Where(booking => booking.Time == booking.Time 
+            //&& booking.DateTime==booking.DateTime && booking.TableNumber==booking.TableNumber)
+            //    .FirstOrDefault();
 
-           // bookingList.Add(new Bookings(Name, date, tableNumber));
+            //if (currentBooking ==)
+            //{
+            //    throw new Exception("The table is already booked on that date and time.");
+            //}
+
+            //else {
+                string Name = customerName.Text;
+                DateTime date = datepicker.DisplayDate;
+                string tableNumber = TableNumCB.SelectedItem.ToString();
+                var time = timepicker.SelectedItem.ToString();
+
+            foreach(var booking in bookingList)
+            {
+                if (booking.TableNumber==tableNumber &&
+                    booking.DateTime==date &&
+                    booking.Time == time)
+                {
+                    throw new Exception("The table is already booked on that date and time." +
+                        "Please try again!");
+                }
+
+            }
+            
+            bookingList.Add(new Bookings(Name, date, tableNumber, time));
+            //}
+        }
+
+        private void ShowBookingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            servingWindow.Clear();
+            BookingWindowContent();
+        }
+
+        private void datepicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void CancelingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // var avbokning= servingWindow.selected object
+            //bookingList.Remove();
+
+            //or access the file, delete the avbokning object
         }
     }
 }

@@ -11,14 +11,14 @@ namespace CSLab3
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
         public string TableNumber { get; set; }
-        public DateTime GetTime { get; set; }
+        public string Time { get; set; }
 
-        public Bookings(string name, DateTime date, string tableNum, DateTime time)
+        public Bookings(string name, DateTime date, string tableNum, string time)
         {
             this.Name = name;
-            this.DateTime = date;
+            this.DateTime = date.Date;
             this.TableNumber = tableNum;
-            this.GetTime = time;
+            this.Time = time;
         }
     }
 }

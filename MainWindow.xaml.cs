@@ -23,6 +23,7 @@ namespace CSLab3
     {
         List<Bookings> bookingList = new List<Bookings>();
         List<Tables> table = new List<Tables>();
+        //List<TimeOnly> timeOnlyList = new List<TimeOnly>();
 
         public MainWindow()
         {
@@ -39,6 +40,8 @@ namespace CSLab3
             table.Add(new Tables("6"));
             table.Add(new Tables("7"));
             TableListCBContent();
+            TimeListContent();
+            
         }
 
         public string BookingWindowContent()
@@ -58,6 +61,16 @@ namespace CSLab3
                 TableNumCB.ItemsSource += table.number;
             }
         }
+
+        public void TimeListContent()
+        {
+            for (int i = 11; i < 22; i++)
+            {
+                timepicker.Items.Add(i + ".00");
+                // or
+                //comboBox1.Items.Add(i.ToString("00")); // to get 00, 01, 02 
+            }
+        }
         private void datepicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             //BookingList.date property- add to the list of bookings and blockout the date
@@ -70,6 +83,15 @@ namespace CSLab3
             //int tableNum=ComboBox
 
             //bookingList.Add(new Bookings(name, date, Table number, time));
+        }
+
+        private void bookingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string Name= customerName.Text;
+            var date=datepicker.DisplayDate;
+            var tableNumber = TableNumCB.Items;
+
+           // bookingList.Add(new Bookings(Name, date, tableNumber));
         }
     }
 }

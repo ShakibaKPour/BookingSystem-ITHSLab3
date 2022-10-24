@@ -34,9 +34,7 @@
             <TextBox x:Name="customerName" Width="140" Margin="40,10,10,10"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" Margin="10">
-            <ComboBox x:Name="timepicker" Margin="10" Width="140">
-                <ComboBoxItem></ComboBoxItem>
-            </ComboBox>
+            <ComboBox x:Name="timepicker" Margin="10" Width="140"></ComboBox>
             <ComboBox x:Name="TableNumCB" Width="140" Margin="40,10,10,10">
                 <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -47,7 +45,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="2" Grid.RowSpan="2" Margin="10" 
                     HorizontalAlignment="Left">
-            <Button x:Name="bookingBtn" Content="Boka" Width="60" Margin="15"></Button>
+            <Button x:Name="bookingBtn" Content="Boka" Width="60" Margin="15" Click="bookingBtn_Click"></Button>
             <Button x:Name="ShowBookingBtn" Content="Visa Bokningar" Width="60" Margin="15"></Button>
             <Button x:Name="CancelingBtn" Content="Avboka" Width="60" Margin="15"></Button>
         </StackPanel>

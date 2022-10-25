@@ -26,8 +26,8 @@ namespace CSLab3
         List<Bookings> bookingList = new List<Bookings>();
 
         List<Tables> table = new List<Tables>();
-        List<Table> availableTableList = new List<Table>();
-        List<Table> bookedTableList = new List<Table>();
+        List<Tables> availableTableList = new List<Tables>();
+        List<Tables> bookedTableList = new List<Tables>();
 
         List <DateTime> availablDates = new List<DateTime>();
         List <DateTime> bookedDates = new List<DateTime>();
@@ -41,7 +41,7 @@ namespace CSLab3
             bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19"));
             bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20"));
             bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18"));
-            BookingWindowContent();
+            UpdateContent();
 
 
             table.Add(new Tables("1"));
@@ -55,24 +55,26 @@ namespace CSLab3
             TimeListContent();
         }
 
-        public void BookingWindowContent()
-        {  
-
-        foreach(Bookings booking in bookingList)
+        public void UpdateContent()
+        {
+            bookingBox.ItemsSource = null;
+            foreach (Bookings booking in bookingList)
             {
-                bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
-                     " kl. "+booking.Time + " Bord N. " + booking.TableNumber);
+                bookingBox.ItemsSource += booking.Name + " " + booking.Date.ToShortDateString() +
+                     " kl. " + booking.Time + " Bord N. " + booking.TableNumber;
             }
-            
-        //here I can add it to a fil and then return the file content?
+
+            //Save it to a file later
         }
 
     public void TableListCBContent()
         {
-            foreach (var table in table)
+           foreach (Tables t in table)
             {
-                TableNumCB.ItemsSource += table.number;
+                TableNumCB.ItemsSource += t.number;
             }
+                
+            
         }
 
         public void TimeListContent()
@@ -98,21 +100,22 @@ namespace CSLab3
                     booking.Date == date &&
                     booking.Time == time)
                 {
-                    MessageBox.Show("The table is already booked on that date and time." +
-                        "Please try again!");
-                    break;
+                    MessageBox.Show("This table is already booked on that date and time." +
+                        "Please try another combination!");
+                    return;
                 }
 
             }
-
+            
             bookingList.Add(new Bookings(name, date, tableNumber, time));
+            UpdateContent();
             MessageBox.Show("Bokningen är klar!");    
         }
 
         private void ShowBookingBtn_Click(object sender, RoutedEventArgs e)
         {
             bookingBox.Items.Clear();
-            BookingWindowContent();
+            UpdateContent();
             
         }
 
@@ -120,6 +123,11 @@ namespace CSLab3
         {
             var avbokning= bookingBox.SelectedItem;
             bookingList.Remove((Bookings)avbokning);
+
+            if (bookingBox.SelectedItem == null)
+                return;
+            bookingList.Remove((Bookings)bookingBox.SelectedItem);
+            UpdateContent();
 
             //or access the file, delete the avbokning object
         }

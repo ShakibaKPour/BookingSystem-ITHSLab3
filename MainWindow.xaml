@@ -24,7 +24,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Label Content="Bokningar" Margin="10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
-        <ListBox x:Name="bookingBox" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <ListBox x:Name="bookingBox" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="10"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
             <Label Content="Datum" Margin="30,5,60,0" Width="auto"/>
             <Label Content="Namn" Margin="120,5,10,0" Width="auto"/>

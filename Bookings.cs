@@ -9,14 +9,14 @@ namespace CSLab3
     internal class Bookings
     {
         public string Name { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime Date { get; set; }
         public string TableNumber { get; set; }
         public string Time { get; set; }
 
         public Bookings(string name, DateTime date, string tableNum, string time)
         {
             this.Name = name;
-            this.DateTime = date.Date;
+            this.Date = date.Date;
             this.TableNumber = tableNum;
             this.Time = time;
         }

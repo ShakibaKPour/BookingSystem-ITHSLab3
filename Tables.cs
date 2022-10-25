@@ -10,6 +10,7 @@ namespace CSLab3
     {
         public string number { get; set; }
 
+
         public Tables(string num)
         {
             this.number = num;

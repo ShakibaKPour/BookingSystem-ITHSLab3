@@ -5,51 +5,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSLab3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" FontSize="15" FontFamily="Comic Sans MS">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Label Content="Serving" Margin="10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
-        <TextBox x:Name="servingWindow" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Text="" Margin="10"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="10">
-            <Label Content="Datum" Margin="10" Width="60"/>
-            <Label Content="Namn" Margin="120,10,10,10" Width="60"/>
+        <Label Content="Bokningar" Margin="10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
+        <ListBox x:Name="bookingBox" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+            <Label Content="Datum" Margin="30,5,60,0" Width="auto"/>
+            <Label Content="Namn" Margin="120,5,10,0" Width="auto"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Margin="10">
-            <DatePicker x:Name="datepicker" Margin="10" Width="140" SelectedDateFormat="Short"
-                SelectedDateChanged="datepicker_SelectedDateChanged">
-            </DatePicker>
-            <TextBox x:Name="customerName" Width="140" Margin="40,10,10,10"/>
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" Grid.RowSpan="3" Margin="10">
+            <Calendar x:Name="myCalendar" SelectionMode="SingleDate" 
+                    IsTodayHighlighted="true" SelectedDatesChanged="myCalendar_SelectedDatesChanged">
+                <!--<Calendar.BlackoutDates>
+                 
+                    <CalendarDateRange Start="3/8/2010" End="3/8/2010"/>
+                    <CalendarDateRange Start="3/15/2010" End="3/15/2010"/>
+                    <CalendarDateRange Start="3/22/2010" End="3/22/2010"/>
+                    <CalendarDateRange Start="3/29/2010" End="3/29/2010"/>
+                </Calendar.BlackoutDates>-->
+                <Calendar.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                        <GradientStop Color="Blue" Offset="0.1" />
+                        <GradientStop Color="Orange" Offset="0.25" />
+                        <GradientStop Color="Green" Offset="0.75" />
+                        <GradientStop Color="Red" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Calendar.Background>
+                <Calendar.Foreground>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                        <GradientStop Color="Black" Offset="0.25" />
+                        <GradientStop Color="Green" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Calendar.Foreground>
+            </Calendar>
+            <ComboBox x:Name="timepicker" Margin="10" Height="25" Width="170"></ComboBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" Margin="10">
-            <ComboBox x:Name="timepicker" Margin="10" Width="140"></ComboBox>
-            <ComboBox x:Name="TableNumCB" Width="140" Margin="40,10,10,10">
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" Grid.RowSpan="4" Margin="10">
+            <TextBox x:Name="customerName" Width="170" Height="40" Margin="20"/>
+            <ComboBox x:Name="TableNumCB" Width="170" Height="25" Margin="20"
+                      Text="Bord">
                 <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding }"
                     </DataTemplate>
                 </ComboBox.ItemTemplate>-->
             </ComboBox>
+            <Button x:Name="bookingBtn" Content="Boka" Width="170" Margin="15" Height="25" Click="bookingBtn_Click"></Button>
+            <Button x:Name="ShowBookingBtn" Content="Visa Bokningar" Width="170" Margin="15" Height="25" Click="ShowBookingBtn_Click"></Button>
+            <Button x:Name="CancelingBtn" Content="Avboka" Width="170" Margin="15" Height="25" Click="CancelingBtn_Click"></Button>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="2" Grid.RowSpan="2" Margin="10" 
-                    HorizontalAlignment="Left">
-            <Button x:Name="bookingBtn" Content="Boka" Width="60" Margin="15" Click="bookingBtn_Click"></Button>
-            <Button x:Name="ShowBookingBtn" Content="Visa Bokningar" Width="60" Margin="15" Click="ShowBookingBtn_Click"></Button>
-            <Button x:Name="CancelingBtn" Content="Avboka" Width="60" Margin="15" Click="CancelingBtn_Click"></Button>
-        </StackPanel>
+        
         
         
             

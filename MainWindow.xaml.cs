@@ -42,6 +42,8 @@ namespace CSLab3
             bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20"));
             bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18"));
             BookingWindowContent();
+
+
             table.Add(new Tables("1"));
             table.Add(new Tables("2"));
             table.Add(new Tables("3"));
@@ -51,23 +53,21 @@ namespace CSLab3
             table.Add(new Tables("7"));
             TableListCBContent();
             TimeListContent();
-            
         }
 
-        public string BookingWindowContent()
-        {
-            foreach(var booking in bookingList)
+        public void BookingWindowContent()
+        {  
+
+        foreach(Bookings booking in bookingList)
             {
-                servingWindow.Text += "Namn: " + booking.Name + " , Datum: " + booking.DateTime.ToShortDateString()
-                    + " , Kl. "+ booking.Time + " , Bord N.: "
-                    + booking.TableNumber  + "\n";
+                bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
+                     " kl. "+booking.Time + " Bord N. " + booking.TableNumber);
             }
-            return servingWindow.Text;
-
-            //here I can add it to a fil and then return the file content?
+            
+        //here I can add it to a fil and then return the file content?
         }
 
-        public void TableListCBContent()
+    public void TableListCBContent()
         {
             foreach (var table in table)
             {
@@ -86,54 +86,47 @@ namespace CSLab3
 
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
-            //var currentBooking=bookingList.Where(booking => booking.Time == booking.Time 
-            //&& booking.DateTime==booking.DateTime && booking.TableNumber==booking.TableNumber)
-            //    .FirstOrDefault();
 
-            //if (currentBooking ==)
-            //{
-            //    throw new Exception("The table is already booked on that date and time.");
-            //}
-
-            //else {
-                string Name = customerName.Text;
-                DateTime date = datepicker.DisplayDate;
+                string name = customerName.Text;
+                DateTime date = (DateTime)myCalendar.SelectedDate;
                 string tableNumber = TableNumCB.SelectedItem.ToString();
                 var time = timepicker.SelectedItem.ToString();
 
-            foreach(var booking in bookingList)
+            foreach (var booking in bookingList)
             {
-                if (booking.TableNumber==tableNumber &&
-                    booking.DateTime==date &&
+                if (booking.TableNumber == tableNumber &&
+                    booking.Date == date &&
                     booking.Time == time)
                 {
-                    throw new Exception("The table is already booked on that date and time." +
+                    MessageBox.Show("The table is already booked on that date and time." +
                         "Please try again!");
+                    break;
                 }
 
             }
-            
-            bookingList.Add(new Bookings(Name, date, tableNumber, time));
-            //}
+
+            bookingList.Add(new Bookings(name, date, tableNumber, time));
+            MessageBox.Show("Bokningen är klar!");    
         }
 
         private void ShowBookingBtn_Click(object sender, RoutedEventArgs e)
         {
-            servingWindow.Clear();
+            bookingBox.Items.Clear();
             BookingWindowContent();
-        }
-
-        private void datepicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
             
         }
 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
-            // var avbokning= servingWindow.selected object
-            //bookingList.Remove();
+            var avbokning= bookingBox.SelectedItem;
+            bookingList.Remove((Bookings)avbokning);
 
             //or access the file, delete the avbokning object
+        }
+
+        private void myCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DateTime date = (DateTime)myCalendar.SelectedDate;
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using Microsoft.Win32;
 
 namespace CSLab3
 {
@@ -29,19 +30,20 @@ namespace CSLab3
         List<Tables> availableTableList = new List<Tables>();
         List<Tables> bookedTableList = new List<Tables>();
 
-        List <DateTime> availablDates = new List<DateTime>();
-        List <DateTime> bookedDates = new List<DateTime>();
+        List<DateTime> availablDates = new List<DateTime>();
+        List<DateTime> bookedDates = new List<DateTime>();
 
-        List<string> availableHours = new List<string>();
-        List<string> bookedHours = new List<string>();
-        
+       
+
         public MainWindow()
         {
             InitializeComponent();
-            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19"));
-            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20"));
-            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18"));
+
+            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022, 11, 10), "1", "19.00"));
+            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20.00"));
+            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18.00"));
             UpdateContent();
+            
 
 
             table.Add(new Tables("1"));
@@ -55,26 +57,35 @@ namespace CSLab3
             TimeListContent();
         }
 
+       
         public void UpdateContent()
         {
-            bookingBox.ItemsSource = null;
+            bookingBox.Items.Clear();
             foreach (Bookings booking in bookingList)
             {
-                bookingBox.ItemsSource += booking.Name + " " + booking.Date.ToShortDateString() +
-                     " kl. " + booking.Time + " Bord N. " + booking.TableNumber;
+                bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
+                     " kl. " + booking.Time + " Bord N. " + booking.TableNumber);
             }
+            
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            foreach (object item in bookingBox.Items)
+            {
+                sb.Append(item.ToString());
+                sb.Append("\n");
+            }
+            
+            File.WriteAllText(@"BookigListFile.txt", sb.ToString());
 
-            //Save it to a file later
         }
 
-    public void TableListCBContent()
+        public void TableListCBContent()
         {
-           foreach (Tables t in table)
+            foreach (Tables t in table)
             {
                 TableNumCB.ItemsSource += t.number;
             }
-                
-            
+
+
         }
 
         public void TimeListContent()
@@ -82,59 +93,82 @@ namespace CSLab3
             for (int i = 11; i < 22; i++)
             {
                 timepicker.Items.Add(i.ToString() + ".00"); ;
-                
+
             }
         }
 
+        
+
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                // add also a regex for name , so user doesn't write number
                 string name = customerName.Text;
                 DateTime date = (DateTime)myCalendar.SelectedDate;
                 string tableNumber = TableNumCB.SelectedItem.ToString();
                 var time = timepicker.SelectedItem.ToString();
 
-            foreach (var booking in bookingList)
-            {
-                if (booking.TableNumber == tableNumber &&
-                    booking.Date == date &&
-                    booking.Time == time)
+
+
+                foreach (var booking in bookingList)
                 {
-                    MessageBox.Show("This table is already booked on that date and time." +
-                        "Please try another combination!");
-                    return;
+                    if (tableNumber == booking.TableNumber &&
+                        date == booking.Date &&
+                        time == booking.Time)
+                    {
+                        MessageBox.Show("This table is already booked on that date and time. " +
+                            "Please try another combination!");
+                        return;
+                    }
+
                 }
 
+                bookingList.Add(new Bookings(name, date, tableNumber, time));
+                UpdateContent();
+                MessageBox.Show("Bokningen är klar!");
             }
-            
-            bookingList.Add(new Bookings(name, date, tableNumber, time));
-            UpdateContent();
-            MessageBox.Show("Bokningen är klar!");    
-        }
+            catch
+            {
+                MessageBox.Show("Something went wrong! Please insert all the required data.");
+            }
 
+
+
+        }
+       
         private void ShowBookingBtn_Click(object sender, RoutedEventArgs e)
         {
             bookingBox.Items.Clear();
             UpdateContent();
-            
+            // it's not working atm : File.ReadAllText(@"BookigListFile.txt");
         }
 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
-            var avbokning= bookingBox.SelectedItem;
-            bookingList.Remove((Bookings)avbokning);
+            //if (bookingBox.SelectedItem == null)
+            //    return;
 
-            if (bookingBox.SelectedItem == null)
-                return;
-            bookingList.Remove((Bookings)bookingBox.SelectedItem);
-            UpdateContent();
-
-            //or access the file, delete the avbokning object
+            //bookingList.Items.Remove((Bookings)bookingBox.SelectedItem);
+            //UpdateContent();
         }
 
-        private void myCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
-            DateTime date = (DateTime)myCalendar.SelectedDate;
+            //bookingBox.ClearSelected();
+
+            //int index = bookingBox.FindString(customerName.Text);
+
+            //if (index < 0)
+            //{
+            //    MessageBox.Show("Item not found.");
+            //    customerName.Text = String.Empty;
+            //}
+            //else
+            //{
+            //    customerName.SelectedIndex = index;
+            //}
         }
-    }
-}
+
+    } }
+

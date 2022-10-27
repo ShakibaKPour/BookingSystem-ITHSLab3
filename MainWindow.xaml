@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
         <Label Content="Bokningar" Margin="10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
         <ListBox x:Name="bookingBox" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="10"
-                 SelectionMode="Multiple">
+                 SelectionMode="Single">
         </ListBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
             <Label Content="Datum" Margin="30,5,60,0" Width="auto"/>
@@ -70,7 +70,7 @@
             </ComboBox>
             <Button x:Name="bookingBtn" Content="Boka" Width="170" Margin="15" Height="25" Click="bookingBtn_Click"></Button>
             <Button x:Name="SearchBtn" Content="Search" Width="170" Margin="15" Height="25" Click="SearchBtn_Click"></Button>
-            <Button x:Name="ShowBookingBtn" Content="Visa Bokningar" Width="170" Margin="15" Height="25" Click="ShowBookingBtn_Click"></Button>
+            <Button x:Name="OpenFileBtn" Content="Open" Width="170" Margin="15" Height="25" Click="OpenFileBtn_Click"></Button>
             <Button x:Name="CancelingBtn" Content="Avboka" Width="170" Margin="15" Height="25" Click="CancelingBtn_Click"></Button>
         </StackPanel>
         

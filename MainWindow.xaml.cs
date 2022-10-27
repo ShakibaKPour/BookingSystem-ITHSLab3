@@ -92,7 +92,7 @@ namespace CSLab3
 
         public void TimeListContent()
         {
-            for (int i = 11; i < 22; i++)
+            for (int i = 11; i < 23; i++)
             {
                 timepicker.Items.Add(i.ToString() + ".00"); ;
 
@@ -110,9 +110,33 @@ namespace CSLab3
             try
             {
                 // add also a regex for name , so user doesn't write number
+                if (customerName.Text == null)
+                {
+                    MessageBox.Show("Please enter your name");
+                    return;
+                }
+                if (myCalendar.SelectedDate == null)
+                {
+                    MessageBox.Show("Please choose a date");
+                    return;
+                }
+                if (TableNumCB.SelectedItem == null)
+                {
+                    MessageBox.Show("Please choose your table");
+                    return;
+                }
+                if (timepicker.SelectedItem == null)
+                {
+                    MessageBox.Show("Please choose a time");
+                    return;
+                }
+
                 string name = customerName.Text;
+
                 DateTime date = (DateTime)myCalendar.SelectedDate;
+
                 string tableNumber = TableNumCB.SelectedItem.ToString();
+                
                 var time = timepicker.SelectedItem.ToString();
 
 
@@ -133,6 +157,10 @@ namespace CSLab3
                 bookingList.Add(new Bookings(name, date, tableNumber, time));
                 UpdateContent();
                 MessageBox.Show("Bokningen är klar!");
+                customerName.Text=null;
+                myCalendar.SelectedDate=null;
+                
+
             }
             catch
             {
@@ -143,11 +171,22 @@ namespace CSLab3
 
         }
        
-        private void ShowBookingBtn_Click(object sender, RoutedEventArgs e)
+        private void OpenFileBtn_Click(object sender, RoutedEventArgs e)
         {
-            bookingBox.Items.Clear();
-            UpdateContent();
-            // it's not working atm : File.ReadAllText(@"BookigListFile.txt");
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".txt"; // Default file extension
+            dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by ex
+                                                        // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                string filename = dlg.FileName;
+            }
+           // bookingBox.ItemsSource = null;
+            // bookingBox.ItemsSource = File.ReadAllText(dlg.FileName);
         }
 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)

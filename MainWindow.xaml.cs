@@ -60,20 +60,22 @@ namespace CSLab3
        
         public void UpdateContent()
         {
+            //bookingBox.ItemsSource = null;
+            //bookingBox.ItemsSource = bookingList;
             bookingBox.Items.Clear();
             foreach (Bookings booking in bookingList)
             {
                 bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
                      " kl. " + booking.Time + " Bord N. " + booking.TableNumber);
             }
-            
+
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (object item in bookingBox.Items)
             {
                 sb.Append(item.ToString());
                 sb.Append("\n");
             }
-            
+
             File.WriteAllText(@"BookigListFile.txt", sb.ToString());
 
         }
@@ -97,6 +99,10 @@ namespace CSLab3
             }
         }
 
+        public void changeToString()
+        {
+            bookingBox.SelectedItem.ToString();
+        }
         
 
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
@@ -146,11 +152,12 @@ namespace CSLab3
 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
-            //if (bookingBox.SelectedItem == null)
-            //    return;
+            if (bookingBox.SelectedItem == null)
+                return;
+            bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
+           
+            UpdateContent();
 
-            //bookingList.Items.Remove((Bookings)bookingBox.SelectedItem);
-            //UpdateContent();
         }
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)

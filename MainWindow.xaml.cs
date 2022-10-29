@@ -55,9 +55,18 @@ namespace CSLab3
             table.Add(new Tables("7"));
             TableListCBContent();
             TimeListContent();
+            EnableButton();
         }
 
-       
+        private void EnableButton()
+        {
+            if (customerName.Text == null || timepicker.SelectedItem == null || TableNumCB.SelectedItem == null || myCalendar.SelectedDate == null)
+            {
+                bookingBtn.IsEnabled = false;
+            }
+            else bookingBtn.IsEnabled = true;
+        }
+
         public void UpdateContent()
         {
             //bookingBox.ItemsSource = null;
@@ -84,7 +93,7 @@ namespace CSLab3
         {
             foreach (Tables t in table)
             {
-                TableNumCB.ItemsSource += t.number;
+                TableNumCB.Items.Add(t.number);
             }
 
 
@@ -107,6 +116,7 @@ namespace CSLab3
 
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
+            
             try
             {
                 // add also a regex for name , so user doesn't write number
@@ -153,14 +163,15 @@ namespace CSLab3
                     }
 
                 }
-
+                
                 bookingList.Add(new Bookings(name, date, tableNumber, time));
                 UpdateContent();
                 MessageBox.Show("Bokningen är klar!");
                 customerName.Text=null;
                 myCalendar.SelectedDate=null;
+                timepicker.SelectedItem = null;
+                TableNumCB.SelectedItem =null;
                 
-
             }
             catch
             {
@@ -216,5 +227,24 @@ namespace CSLab3
             //}
         }
 
+        private void customerName_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            EnableButton();
+        }
+
+        private void TableNumCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EnableButton();
+        }
+
+        private void myCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EnableButton();
+        }
+
+        private void timepicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EnableButton();
+        }
     } }
 

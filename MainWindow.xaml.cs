@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace CSLab3
 {
@@ -39,9 +40,9 @@ namespace CSLab3
         {
             InitializeComponent();
 
-            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022, 11, 10), "1", "19.00"));
-            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20.00"));
-            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18.00"));
+            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022, 11, 10), "1", "19.00 - 21.00"));
+            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20.00 - 22.00"));
+            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18.00 - 20.00"));
             UpdateContent();
             
 
@@ -103,7 +104,7 @@ namespace CSLab3
         {
             for (int i = 11; i < 23; i++)
             {
-                timepicker.Items.Add(i.ToString() + ".00"); ;
+                timepicker.Items.Add(i.ToString() + ".00 - " + (i+2).ToString() + ".00");
 
             }
         }
@@ -112,7 +113,16 @@ namespace CSLab3
         {
             bookingBox.SelectedItem.ToString();
         }
-        
+
+        public void ValidateCalender()
+        {
+            if (myCalendar.SelectedDate < DateTime.Today)
+            {
+                MessageBox.Show("You cannot choose passed days!");
+                myCalendar.SelectedDate = null;
+            }
+        }
+
 
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -120,36 +130,38 @@ namespace CSLab3
             try
             {
                 // add also a regex for name , so user doesn't write number
-                if (customerName.Text == null)
-                {
-                    MessageBox.Show("Please enter your name");
-                    return;
-                }
-                if (myCalendar.SelectedDate == null)
-                {
-                    MessageBox.Show("Please choose a date");
-                    return;
-                }
-                if (TableNumCB.SelectedItem == null)
-                {
-                    MessageBox.Show("Please choose your table");
-                    return;
-                }
-                if (timepicker.SelectedItem == null)
-                {
-                    MessageBox.Show("Please choose a time");
-                    return;
-                }
+                //if (customerName.Text == null)
+                //{
+                //    MessageBox.Show("Please enter your name");
+                //    return;
+                //}
+                //if (myCalendar.SelectedDate == null)
+                //{
+                //    MessageBox.Show("Please choose a date");
+                //    return;
+                //}
+                //if (TableNumCB.SelectedItem == null)
+                //{
+                //    MessageBox.Show("Please choose your table");
+                //    return;
+                //}
+                //if (timepicker.SelectedItem == null)
+                //{
+                //    MessageBox.Show("Please choose a time");
+                //    return;
+                //}
 
                 string name = customerName.Text;
 
+                ValidateCalender();
                 DateTime date = (DateTime)myCalendar.SelectedDate;
 
                 string tableNumber = TableNumCB.SelectedItem.ToString();
                 
                 var time = timepicker.SelectedItem.ToString();
 
-
+                var endofbookedtime = timepicker.SelectedItem + 2.00.ToString();
+                    
 
                 foreach (var booking in bookingList)
                 {

@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace CSLab3
 {
@@ -28,13 +30,16 @@ namespace CSLab3
         List<Bookings> bookingList = new List<Bookings>();
 
         List<Tables> table = new List<Tables>();
+        
+        List<string> Filedata = new List<string>();
+
         List<Tables> availableTableList = new List<Tables>();
         List<Tables> bookedTableList = new List<Tables>();
 
         List<DateTime> availablDates = new List<DateTime>();
         List<DateTime> bookedDates = new List<DateTime>();
 
-       
+        string[] ArrayBookingList;
 
         public MainWindow()
         {
@@ -70,14 +75,14 @@ namespace CSLab3
 
         public void UpdateContent()
         {
-            //bookingBox.ItemsSource = null;
-            //bookingBox.ItemsSource = bookingList;
-            bookingBox.Items.Clear();
-            foreach (Bookings booking in bookingList)
-            {
-                bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
-                     " kl. " + booking.Time + " Bord N. " + booking.TableNumber);
-            }
+            bookingBox.ItemsSource = null;
+            bookingBox.ItemsSource = bookingList;
+            //bookingBox.Items.Clear();
+            //foreach (Bookings booking in bookingList)
+            //{
+            //    bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
+            //         " kl. " + booking.Time + " Bord N. " + booking.TableNumber);
+            //}
 
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (object item in bookingBox.Items)
@@ -90,7 +95,13 @@ namespace CSLab3
 
         }
 
-        public void TableListCBContent()
+        public void UpdateContentFromFile()
+        {
+            bookingBox.ItemsSource = null;
+            bookingBox.ItemsSource = ArrayBookingList;
+        }
+
+            public void TableListCBContent()
         {
             foreach (Tables t in table)
             {
@@ -112,6 +123,16 @@ namespace CSLab3
         public void changeToString()
         {
             bookingBox.SelectedItem.ToString();
+        }
+        private void ValidateName()   //Regex is not working
+        {
+            Regex r= new Regex(@"[a - z]|[A-Z]*");
+            if (!r.IsMatch(customerName.Text))
+            {
+                MessageBox.Show("Please insert your name");
+                customerName.Text = null;
+                return;
+            }
         }
 
         public void ValidateCalender()
@@ -150,8 +171,9 @@ namespace CSLab3
                 //    MessageBox.Show("Please choose a time");
                 //    return;
                 //}
-
+                
                 string name = customerName.Text;
+                ValidateName();
 
                 ValidateCalender();
                 DateTime date = (DateTime)myCalendar.SelectedDate;
@@ -171,6 +193,9 @@ namespace CSLab3
                     {
                         MessageBox.Show("This table is already booked on that date and time. " +
                             "Please try another combination!");
+                        myCalendar.SelectedDate = null;
+                        timepicker.SelectedItem = null;
+                        TableNumCB.SelectedItem = null;
                         return;
                     }
 
@@ -193,7 +218,8 @@ namespace CSLab3
 
 
         }
-       
+
+
         private void OpenFileBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -208,35 +234,62 @@ namespace CSLab3
                 // Open document
                 string filename = dlg.FileName;
             }
-           // bookingBox.ItemsSource = null;
-            // bookingBox.ItemsSource = File.ReadAllText(dlg.FileName);
+            
+            string[] ArrayBookingList = File.ReadAllLines(dlg.FileName);
+            bookingBox.ItemsSource= ArrayBookingList.ToList();  // It shows the contect but I cannot interact with it
+            //foreach (string Booking in ArrayBookingList)
+            //{
+            //    bookingBox.Items.Add(Booking);
+            //}
+            //using (TextWriter tw = new StreamWriter("Tidsrapporting.txt", true))
+            //{
+            //    foreach (var report in allHoursWorked)
+            //    {
+            //        tw.WriteLine(report);
+            //    }
+            //}
+
         }
 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
             if (bookingBox.SelectedItem == null)
                 return;
-            bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
-           
-            UpdateContent();
+            if (bookingBox.ItemsSource == bookingList) 
+            {
+                bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
+                UpdateContent();
+                MessageBox.Show("Bokningen har borttagen!");
+            }
+            else if (bookingBox.ItemsSource == ArrayBookingList)
+            {
+                ArrayBookingList.ToList().RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
+                UpdateContentFromFile();
+                MessageBox.Show("Bokningen har borttagen!");
+            }
 
         }
 
-        private void SearchBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            //bookingBox.ClearSelected();
 
-            //int index = bookingBox.FindString(customerName.Text);
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".txt"; // Default file extension
+            dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by ex
+                                                        // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+            // Process save file dialog box results
+            if (result == true)
+            {
+                string fileName = dlg.FileName;
+                using (StreamWriter sw = new StreamWriter($"{fileName}.txt"))
+                {
+                    sw.WriteLine(bookingBox.ItemsSource.ToString());  //I can't get th econtent of the box in string
+                }
+                MessageBox.Show($"Saved as {fileName}");
+            }
 
-            //if (index < 0)
-            //{
-            //    MessageBox.Show("Item not found.");
-            //    customerName.Text = String.Empty;
-            //}
-            //else
-            //{
-            //    customerName.SelectedIndex = index;
-            //}
         }
 
         private void customerName_SelectionChanged(object sender, RoutedEventArgs e)

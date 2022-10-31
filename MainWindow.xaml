@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSLab3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800" FontSize="15" FontFamily="Comic Sans MS">
+        Title="Booking System" Height="500" Width="1000" FontSize="15" FontFamily="Verdana" Background="FloralWhite">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -23,16 +23,23 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Label Content="Bokningar" Margin="10" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
-        <ListBox x:Name="bookingBox" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="10"
-                 SelectionMode="Single">
-        </ListBox>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
-            <Label Content="Datum" Margin="30,5,60,0" Width="auto"/>
-            <Label Content="Namn" Margin="120,5,10,0" Width="auto"/>
+        <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.RowSpan="5" Grid.ColumnSpan="3" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.RowSpan="5" Margin="15">
+            <Label Content="Bokningar" Margin="15,15,15,5" HorizontalAlignment="Center"/>
+            <ListBox x:Name="bookingBox" Margin="10" SelectionMode="Single" MinHeight="250" Foreground="Black">
+                    <ListBox.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                            <GradientStop Color="DarkSalmon" Offset="0.1" />
+                            <GradientStop Color="LavenderBlush" Offset="0.25" />
+                            <GradientStop Color= "Lavender" Offset="0.75" />
+                            <GradientStop Color="LightSalmon" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </ListBox.Background>
+            </ListBox>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" Grid.RowSpan="3" Margin="10">
-            <Calendar x:Name="myCalendar" SelectionMode="SingleDate" 
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Margin="10">
+            <Label Content="Datum" Margin="15,15,15,5" Width="auto" HorizontalAlignment="Center"/>
+            <Calendar x:Name="myCalendar" Margin="15" SelectionMode="SingleDate" 
                     IsTodayHighlighted="true" SelectedDatesChanged="myCalendar_SelectedDatesChanged">
                 <Calendar.BlackoutDates>
 
@@ -43,24 +50,25 @@
                 </Calendar.BlackoutDates>
                 <Calendar.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
-                        <GradientStop Color="Blue" Offset="0.1" />
+                        <GradientStop Color="LightSalmon" Offset="0.1" />
                         <GradientStop Color="Orange" Offset="0.25" />
-                        <GradientStop Color="Green" Offset="0.75" />
-                        <GradientStop Color="Red" Offset="1.0" />
+                        <GradientStop Color= "Lavender" Offset="0.75" />
+                        <GradientStop Color="DarkSalmon" Offset="1.0" />
                     </LinearGradientBrush>
                 </Calendar.Background>
                 <Calendar.Foreground>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
                         <GradientStop Color="Black" Offset="0.25" />
-                        <GradientStop Color="Green" Offset="1.0" />
+                        <GradientStop Color="Brown" Offset="1.0" />
                     </LinearGradientBrush>
                 </Calendar.Foreground>
             </Calendar>
-            <ComboBox x:Name="timepicker" Margin="10" Height="25" Width="170" SelectionChanged="timepicker_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="timepicker" Margin="15" Height="25" Width="170" SelectionChanged="timepicker_SelectionChanged"></ComboBox>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" Grid.RowSpan="4" Margin="10">
-            <TextBox x:Name="customerName" Width="170" Height="40" Margin="20" SelectionChanged="customerName_SelectionChanged"/>
-            <ComboBox x:Name="TableNumCB" Width="170" Height="25" Margin="20" SelectionChanged="TableNumCB_SelectionChanged"
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Grid.RowSpan="5" Margin="10">
+            <Label Content="Namn" Margin="15,15,15,5" Width="auto" HorizontalAlignment="Center"/>
+            <TextBox x:Name="customerName" Width="170" Height="40" Margin="15" SelectionChanged="customerName_SelectionChanged"/>
+            <ComboBox x:Name="TableNumCB" Width="170" Height="25" Margin="15" SelectionChanged="TableNumCB_SelectionChanged"
                       Text="Bord">
                 <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -69,16 +77,10 @@
                 </ComboBox.ItemTemplate>-->
             </ComboBox>
             <Button x:Name="bookingBtn" Content="Boka" Width="170" Margin="15" Height="25" Click="bookingBtn_Click"></Button>
-            <Button x:Name="SearchBtn" Content="Search" Width="170" Margin="15" Height="25" Click="SearchBtn_Click"></Button>
-            <Button x:Name="OpenFileBtn" Content="Open" Width="170" Margin="15" Height="25" Click="OpenFileBtn_Click"></Button>
             <Button x:Name="CancelingBtn" Content="Avboka" Width="170" Margin="15" Height="25" Click="CancelingBtn_Click"></Button>
+            <Button x:Name="OpenFileBtn" Content="Open" Width="170" Margin="15" Height="25" Click="OpenFileBtn_Click"></Button>
+            <Button x:Name="SearchBtn" Content="Save" Width="170" Margin="15" Height="25" Click="SaveBtn_Click"></Button>
         </StackPanel>
-        
-        
-        
-            
-
-
-        
+        </WrapPanel>
     </Grid>
 </Window>

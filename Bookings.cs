@@ -20,5 +20,10 @@ namespace CSLab3
             this.TableNumber = tableNum;
             this.Time = time;
         }
+        public override string ToString()
+        {
+            string onlyDate=Date.ToShortDateString();
+            return $"{Name} {onlyDate} kl. {Time} bord n. {TableNumber}";
+        }
     }
 }

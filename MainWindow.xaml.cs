@@ -17,6 +17,8 @@ using Microsoft.Win32;
 using System.ComponentModel;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using System.Text.Json;
+using System.Dynamic;
 
 namespace CSLab3
 {
@@ -25,40 +27,21 @@ namespace CSLab3
     /// </summary>
     public partial class MainWindow : Window
     {
-        DateTime date;
-
         List<Bookings> bookingList = new List<Bookings>();
 
         List<Tables> table = new List<Tables>();
-        
-        List<string> Filedata = new List<string>();
 
-        List<Tables> availableTableList = new List<Tables>();
-        List<Tables> bookedTableList = new List<Tables>();
-
-        List<DateTime> availablDates = new List<DateTime>();
-        List<DateTime> bookedDates = new List<DateTime>();
-
-        string[] ArrayBookingList;
+        //List<Tables> availableTableList = new List<Tables>();
+        //List<Tables> bookedTableList = new List<Tables>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022, 11, 10), "1", "19.00 - 21.00"));
-            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 14), "4", "20.00 - 22.00"));
-            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 10), "2", "18.00 - 20.00"));
+            bookingList.Add(new Bookings("Shakiba Pour", "2022, 11, 10", "1", "19.00 - 21.00"));
+            bookingList.Add(new Bookings("Sara Nilsson", "2022, 11, 14", "4", "20.00 - 22.00"));
+            bookingList.Add(new Bookings("Viktor George", "2022, 11, 10", "2", "18.00 - 20.00"));
             UpdateContent();
-            
-
-
-            table.Add(new Tables("1"));
-            table.Add(new Tables("2"));
-            table.Add(new Tables("3"));
-            table.Add(new Tables("4"));
-            table.Add(new Tables("5"));
-            table.Add(new Tables("6"));
-            table.Add(new Tables("7"));
             TableListCBContent();
             TimeListContent();
             EnableButton();
@@ -73,17 +56,12 @@ namespace CSLab3
             else bookingBtn.IsEnabled = true;
         }
 
-        public void UpdateContent()
+        private void UpdateContent()
         {
             bookingBox.ItemsSource = null;
             bookingBox.ItemsSource = bookingList;
-            //bookingBox.Items.Clear();
-            //foreach (Bookings booking in bookingList)
-            //{
-            //    bookingBox.Items.Add(booking.Name + " " + booking.Date.ToShortDateString() +
-            //         " kl. " + booking.Time + " Bord N. " + booking.TableNumber);
-            //}
 
+            // Make a backup text file any time the listbox is updated
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (object item in bookingBox.Items)
             {
@@ -92,41 +70,33 @@ namespace CSLab3
             }
 
             File.WriteAllText(@"BookigListFile.txt", sb.ToString());
-
         }
 
-        public void UpdateContentFromFile()
+        private void TableListCBContent()
         {
-            bookingBox.ItemsSource = null;
-            bookingBox.ItemsSource = ArrayBookingList;
-        }
+            for (int i = 1; i < 11; i++)
+            {
+                table.Add(new Tables(i.ToString()));
+            }
 
-            public void TableListCBContent()
-        {
             foreach (Tables t in table)
             {
                 TableNumCB.Items.Add(t.number);
             }
-
-
         }
 
-        public void TimeListContent()
+        private void TimeListContent()
         {
             for (int i = 11; i < 23; i++)
             {
-                timepicker.Items.Add(i.ToString() + ".00 - " + (i+2).ToString() + ".00");
+                timepicker.Items.Add(i.ToString() + ".00 - " + (i + 2).ToString() + ".00");
 
             }
         }
 
-        public void changeToString()
-        {
-            bookingBox.SelectedItem.ToString();
-        }
         private void ValidateName()   //Regex is not working
         {
-            Regex r= new Regex(@"[a - z]|[A-Z]*");
+            Regex r = new Regex(@"[a - z]|[A-Z]*");
             if (!r.IsMatch(customerName.Text))
             {
                 MessageBox.Show("Please insert your name");
@@ -135,7 +105,7 @@ namespace CSLab3
             }
         }
 
-        public void ValidateCalender()
+        private void ValidateCalender()
         {
             if (myCalendar.SelectedDate < DateTime.Today)
             {
@@ -144,46 +114,22 @@ namespace CSLab3
             }
         }
 
-
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
-            
             try
             {
-                // add also a regex for name , so user doesn't write number
-                //if (customerName.Text == null)
-                //{
-                //    MessageBox.Show("Please enter your name");
-                //    return;
-                //}
-                //if (myCalendar.SelectedDate == null)
-                //{
-                //    MessageBox.Show("Please choose a date");
-                //    return;
-                //}
-                //if (TableNumCB.SelectedItem == null)
-                //{
-                //    MessageBox.Show("Please choose your table");
-                //    return;
-                //}
-                //if (timepicker.SelectedItem == null)
-                //{
-                //    MessageBox.Show("Please choose a time");
-                //    return;
-                //}
-                
                 string name = customerName.Text;
                 ValidateName();
 
                 ValidateCalender();
-                DateTime date = (DateTime)myCalendar.SelectedDate;
+                string date = myCalendar.SelectedDate.ToString();
+                string showDateOnly = date.Substring(0, date.Length - 9);
 
                 string tableNumber = TableNumCB.SelectedItem.ToString();
-                
+
                 var time = timepicker.SelectedItem.ToString();
 
                 var endofbookedtime = timepicker.SelectedItem + 2.00.ToString();
-                    
 
                 foreach (var booking in bookingList)
                 {
@@ -200,96 +146,48 @@ namespace CSLab3
                     }
 
                 }
-                
-                bookingList.Add(new Bookings(name, date, tableNumber, time));
+
+                bookingList.Add(new Bookings(name, showDateOnly, tableNumber, time));
+
                 UpdateContent();
+
                 MessageBox.Show("Bokningen är klar!");
-                customerName.Text=null;
-                myCalendar.SelectedDate=null;
+
+                customerName.Text = null;
+                myCalendar.SelectedDate = null;
                 timepicker.SelectedItem = null;
-                TableNumCB.SelectedItem =null;
-                
+                TableNumCB.SelectedItem = null;
+
             }
             catch
             {
-                MessageBox.Show("Something went wrong! Please insert all the required data.");
+                MessageBox.Show("Something went wrong! Please try again.");
             }
-
-
-
         }
-
-
-        private void OpenFileBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "Document"; // Default file name
-            dlg.DefaultExt = ".txt"; // Default file extension
-            dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by ex
-                                                        // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-            // Process open file dialog box results
-            if (result == true)
-            {
-                // Open document
-                string filename = dlg.FileName;
-            }
-            
-            string[] ArrayBookingList = File.ReadAllLines(dlg.FileName);
-            bookingBox.ItemsSource= ArrayBookingList.ToList();  // It shows the contect but I cannot interact with it
-            //foreach (string Booking in ArrayBookingList)
-            //{
-            //    bookingBox.Items.Add(Booking);
-            //}
-            //using (TextWriter tw = new StreamWriter("Tidsrapporting.txt", true))
-            //{
-            //    foreach (var report in allHoursWorked)
-            //    {
-            //        tw.WriteLine(report);
-            //    }
-            //}
-
-        }
-
+ 
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
             if (bookingBox.SelectedItem == null)
                 return;
-            if (bookingBox.ItemsSource == bookingList) 
-            {
-                bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
-                UpdateContent();
-                MessageBox.Show("Bokningen har borttagen!");
-            }
-            else if (bookingBox.ItemsSource == ArrayBookingList)
-            {
-                ArrayBookingList.ToList().RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
-                UpdateContentFromFile();
-                MessageBox.Show("Bokningen har borttagen!");
-            }
+            bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
+            UpdateContent();
+            MessageBox.Show("Bokningen har borttagen!");
+        }
+
+        private async void OpenFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using FileStream openStream = File.OpenRead("Bookinglist.json");
+            List<Bookings> getBookinglist =
+                 await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
+            bookingBox.ItemsSource = getBookinglist;
 
         }
 
+
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "Document"; // Default file name
-            dlg.DefaultExt = ".txt"; // Default file extension
-            dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by ex
-                                                        // Show save file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-            // Process save file dialog box results
-            if (result == true)
-            {
-                string fileName = dlg.FileName;
-                using (StreamWriter sw = new StreamWriter($"{fileName}.txt"))
-                {
-                    sw.WriteLine(bookingBox.ItemsSource.ToString());  //I can't get th econtent of the box in string
-                }
-                MessageBox.Show($"Saved as {fileName}");
-            }
-
+            FileSerialization.SerialFileAsync(bookingList);
+            MessageBox.Show("Saved as Bookinglist.json");
         }
 
         private void customerName_SelectionChanged(object sender, RoutedEventArgs e)
@@ -311,5 +209,6 @@ namespace CSLab3
         {
             EnableButton();
         }
-    } }
+    }
+}
 

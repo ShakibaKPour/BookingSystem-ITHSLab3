@@ -41,13 +41,9 @@
             <Label Content="Datum" Margin="15,15,15,5" Width="auto" HorizontalAlignment="Center"/>
             <Calendar x:Name="myCalendar" Margin="15" SelectionMode="SingleDate" 
                     IsTodayHighlighted="true" SelectedDatesChanged="myCalendar_SelectedDatesChanged">
-                <Calendar.BlackoutDates>
-
-                    
-                    <!--<CalendarDateRange Start="3/15/2010" End="3/15/2010"/>
-                    <CalendarDateRange Start="3/22/2010" End="3/22/2010"/>
-                    <CalendarDateRange Start="3/29/2010" End="3/29/2010"/>-->
-                </Calendar.BlackoutDates>
+                    <!--<Calendar.BlackoutDates>
+                        <CalendarDateRange Start: End=""/>
+                    </Calendar.BlackoutDates>-->
                 <Calendar.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
                         <GradientStop Color="LightSalmon" Offset="0.1" />
@@ -68,14 +64,9 @@
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Grid.RowSpan="5" Margin="10">
             <Label Content="Namn" Margin="15,15,15,5" Width="auto" HorizontalAlignment="Center"/>
             <TextBox x:Name="customerName" Width="170" Height="40" Margin="15" SelectionChanged="customerName_SelectionChanged"/>
-            <ComboBox x:Name="TableNumCB" Width="170" Height="25" Margin="15" SelectionChanged="TableNumCB_SelectionChanged"
+                <ComboBox x:Name="TableNumCB" Width="170" Height="25" Margin="15" SelectionChanged="TableNumCB_SelectionChanged"
                       Text="Bord">
-                <!--<ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding }"
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>-->
-            </ComboBox>
+                </ComboBox>
             <Button x:Name="bookingBtn" Content="Boka" Width="170" Margin="15" Height="25" Click="bookingBtn_Click"></Button>
             <Button x:Name="CancelingBtn" Content="Avboka" Width="170" Margin="15" Height="25" Click="CancelingBtn_Click"></Button>
             <Button x:Name="OpenFileBtn" Content="Open" Width="170" Margin="15" Height="25" Click="OpenFileBtn_Click"></Button>

@@ -6,24 +6,25 @@ using System.Threading.Tasks;
 
 namespace CSLab3
 {
-    internal class Bookings
+    public class Bookings
     {
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string TableNumber { get; set; }
         public string Time { get; set; }
 
-        public Bookings(string name, DateTime date, string tableNum, string time)
+        public Bookings(string name, string date, string tableNum, string time)
         {
             this.Name = name;
-            this.Date = date.Date;
+            this.Date = date;
             this.TableNumber = tableNum;
             this.Time = time;
         }
         public override string ToString()
         {
-            string onlyDate=Date.ToShortDateString();
-            return $"{Name} {onlyDate} kl. {Time} bord n. {TableNumber}";
+
+            string allInfo = $"{Name} {Date} kl. {Time} bord n. {TableNumber}";
+            return allInfo;
         }
     }
 }

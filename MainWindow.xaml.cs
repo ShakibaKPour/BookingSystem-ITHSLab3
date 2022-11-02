@@ -37,7 +37,6 @@ namespace CSLab3
         public MainWindow()
         {
             InitializeComponent();
-
             bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19.00 - 21.00"));
             bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022,11,10), "4", "20.00 - 22.00"));
             bookingList.Add(new Bookings("Viktor George", new DateTime(2022,11,10), "2", "18.00 - 20.00"));
@@ -72,7 +71,15 @@ namespace CSLab3
             File.WriteAllText(@"BookigListFile.txt", sb.ToString());
         }
 
-        private void TableListCBContent()
+        private void ClearContent()
+        {
+            customerName.Text = null;
+            myCalendar.SelectedDate = null;
+            timepicker.SelectedItem = null;
+            TableNumCB.SelectedItem = null;
+        }
+
+            private void TableListCBContent()
         {
             for (int i = 1; i < 11; i++)
             {
@@ -140,9 +147,7 @@ namespace CSLab3
                     {
                         MessageBox.Show("This table is already booked on that date and time. " +
                             "Please try another combination!");
-                        myCalendar.SelectedDate = null;
-                        timepicker.SelectedItem = null;
-                        TableNumCB.SelectedItem = null;
+                        ClearContent();
                         return;
                     }
 
@@ -156,10 +161,7 @@ namespace CSLab3
 
                 MessageBox.Show("Bokningen är klar!");
 
-                customerName.Text = null;
-                myCalendar.SelectedDate = null;
-                timepicker.SelectedItem = null;
-                TableNumCB.SelectedItem = null;
+                ClearContent();
 
             }
             catch

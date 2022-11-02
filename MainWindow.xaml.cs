@@ -38,9 +38,9 @@ namespace CSLab3
         {
             InitializeComponent();
 
-            bookingList.Add(new Bookings("Shakiba Pour", "2022, 11, 10", "1", "19.00 - 21.00"));
-            bookingList.Add(new Bookings("Sara Nilsson", "2022, 11, 14", "4", "20.00 - 22.00"));
-            bookingList.Add(new Bookings("Viktor George", "2022, 11, 10", "2", "18.00 - 20.00"));
+            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19.00 - 21.00"));
+            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022,11,10), "4", "20.00 - 22.00"));
+            bookingList.Add(new Bookings("Viktor George", new DateTime(2022,11,10), "2", "18.00 - 20.00"));
             UpdateContent();
             TableListCBContent();
             TimeListContent();
@@ -122,8 +122,8 @@ namespace CSLab3
                 ValidateName();
 
                 ValidateCalender();
-                string date = myCalendar.SelectedDate.ToString();
-                string showDateOnly = date.Substring(0, date.Length - 9);
+                DateTime date = (DateTime)myCalendar.SelectedDate;
+                
 
                 string tableNumber = TableNumCB.SelectedItem.ToString();
 
@@ -136,6 +136,7 @@ namespace CSLab3
                     if (tableNumber == booking.TableNumber &&
                         date == booking.Date &&
                         time == booking.Time)
+
                     {
                         MessageBox.Show("This table is already booked on that date and time. " +
                             "Please try another combination!");
@@ -147,7 +148,9 @@ namespace CSLab3
 
                 }
 
-                bookingList.Add(new Bookings(name, showDateOnly, tableNumber, time));
+                
+
+                bookingList.Add(new Bookings(name, date , tableNumber, time));
 
                 UpdateContent();
 

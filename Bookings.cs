@@ -9,11 +9,11 @@ namespace CSLab3
     public class Bookings
     {
         public string Name { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string TableNumber { get; set; }
         public string Time { get; set; }
 
-        public Bookings(string name, string date, string tableNum, string time)
+        public Bookings(string name, DateTime date, string tableNum, string time)
         {
             this.Name = name;
             this.Date = date;
@@ -22,8 +22,8 @@ namespace CSLab3
         }
         public override string ToString()
         {
-
-            string allInfo = $"{Name} {Date} kl. {Time} bord n. {TableNumber}";
+            string dateOnly = Date.ToShortDateString();
+            string allInfo = $"{Name} {dateOnly} kl. {Time} bord n. {TableNumber}";
             return allInfo;
         }
     }

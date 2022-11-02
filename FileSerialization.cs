@@ -16,8 +16,8 @@ namespace CSLab3
             await Task.Delay(5000);
             string fileName = "Bookinglist.json";
             using FileStream createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, list); //Kan ta tid.
-            await createStream.DisposeAsync(); //Stänger ner async. - Förklara gärna.
+            await JsonSerializer.SerializeAsync(createStream, list);
+            await createStream.DisposeAsync(); 
         }
     }
 }

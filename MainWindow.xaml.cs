@@ -64,14 +64,14 @@ namespace CSLab3
             bookingBox.ItemsSource = bookingList;
 
             // Make a backup text file any time the listbox is updated
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            foreach (object item in bookingBox.Items)
-            {
-                sb.Append(item.ToString());
-                sb.Append("\n");
-            }
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //foreach (object item in bookingBox.Items)
+            //{
+            //    sb.Append(item.ToString());
+            //    sb.Append("\n");
+            //}
 
-            File.WriteAllText(@"BookigListFile.txt", sb.ToString());
+            //File.WriteAllText(@"BookigListFile.txt", sb.ToString());
         }
 
         private void ClearContent()
@@ -187,6 +187,8 @@ namespace CSLab3
 
             if (!File.Exists(FileName))
             {
+                //    //MessageBox.Show("There is no serilaized file to load");
+                //    //return;
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                 dlg.FileName = "BookingListFile";
                 dlg.DefaultExt = ".json";
@@ -196,22 +198,26 @@ namespace CSLab3
                 {
                     string filename = dlg.FileName;
                     FileName = filename;
-                    using FileStream openStream = File.OpenRead("Bookinglist.json");
+                    using FileStream openStream = File.OpenRead(FileName);
                     List<Bookings> getBookinglist =
                          await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
                     bookingList = getBookinglist;
-                    bookingBox.ItemsSource = bookingList;
+                    bookingBox.ItemsSource = getBookinglist;
                 }
             }
             else
             {
-                string filename = FileName;
+
+
+                string filename = "BookingListFile.json";
                 using FileStream openStream = File.OpenRead(filename);
                 List<Bookings> getBookinglist =
                      await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
                 bookingList = getBookinglist;
                 bookingBox.ItemsSource = bookingList;
-            }
+
+                
+           }
 
         }
 
@@ -233,17 +239,17 @@ namespace CSLab3
                     using FileStream createStream = File.Create(filename);
                     await JsonSerializer.SerializeAsync(createStream, bookingList);
                     await createStream.DisposeAsync();
-                    MessageBox.Show("Saved as Bookinglist.json");
+                    MessageBox.Show("Saved as BookingListFile.json");
                 }
             }
             else
             {
 
-                string fileName = "Bookinglist.json";
+                string fileName = "BookingListFile.json";
                 using FileStream createStream = File.Create(fileName);
                 await JsonSerializer.SerializeAsync(createStream, bookingList);
                 await createStream.DisposeAsync();
-                MessageBox.Show("Saved as Bookinglist.json");
+                MessageBox.Show("Saved as BookingListFile.json");
             }
         }
 

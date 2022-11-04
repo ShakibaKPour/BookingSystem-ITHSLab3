@@ -27,9 +27,12 @@ namespace CSLab3
     /// </summary>
     public partial class MainWindow : Window
     {
+     
         List<Bookings> bookingList = new List<Bookings>();
 
         List<Tables> table = new List<Tables>();
+
+        public string FileName;
 
         //List<Tables> availableTableList = new List<Tables>();
         //List<Tables> bookedTableList = new List<Tables>();
@@ -179,21 +182,69 @@ namespace CSLab3
             MessageBox.Show("Bokningen har borttagen!");
         }
 
-        private async void OpenFileBtn_Click(object sender, RoutedEventArgs e)
+        private async void LoadFileBtn_Click(object sender, RoutedEventArgs e)
         {
-            using FileStream openStream = File.OpenRead("Bookinglist.json");
-            List<Bookings> getBookinglist =
-                 await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
-            bookingList = getBookinglist;
-            bookingBox.ItemsSource= bookingList;
+
+            if (!File.Exists(FileName))
+            {
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.FileName = "BookingListFile";
+                dlg.DefaultExt = ".json";
+                dlg.Filter = "booking list file (.json)|*.json";
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    string filename = dlg.FileName;
+                    FileName = filename;
+                    using FileStream openStream = File.OpenRead("Bookinglist.json");
+                    List<Bookings> getBookinglist =
+                         await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
+                    bookingList = getBookinglist;
+                    bookingBox.ItemsSource = bookingList;
+                }
+            }
+            else
+            {
+                string filename = FileName;
+                using FileStream openStream = File.OpenRead(filename);
+                List<Bookings> getBookinglist =
+                     await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
+                bookingList = getBookinglist;
+                bookingBox.ItemsSource = bookingList;
+            }
 
         }
 
 
-        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        private async void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            FileSerialization.SerialFileAsync(bookingList);
-            MessageBox.Show("Saved as Bookinglist.json");
+
+            if (!File.Exists(FileName))
+            {
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                dlg.FileName = "BookingListFile";
+                dlg.DefaultExt = ".json";
+                dlg.Filter = "booking list file (.json)|*.json";
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    string filename = dlg.FileName;
+                    FileName = filename;
+                    using FileStream createStream = File.Create(filename);
+                    await JsonSerializer.SerializeAsync(createStream, bookingList);
+                    await createStream.DisposeAsync();
+                    MessageBox.Show("Saved as Bookinglist.json");
+                }
+            }
+            else
+            {
+
+                string fileName = "Bookinglist.json";
+                using FileStream createStream = File.Create(fileName);
+                await JsonSerializer.SerializeAsync(createStream, bookingList);
+                await createStream.DisposeAsync();
+                MessageBox.Show("Saved as Bookinglist.json");
+            }
         }
 
         private void customerName_SelectionChanged(object sender, RoutedEventArgs e)

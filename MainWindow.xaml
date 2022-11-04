@@ -69,7 +69,7 @@
                 </ComboBox>
             <Button x:Name="bookingBtn" Content="Boka" Width="170" Margin="15" Height="25" Click="bookingBtn_Click"></Button>
             <Button x:Name="CancelingBtn" Content="Avboka" Width="170" Margin="15" Height="25" Click="CancelingBtn_Click"></Button>
-            <Button x:Name="OpenFileBtn" Content="Open" Width="170" Margin="15" Height="25" Click="OpenFileBtn_Click"></Button>
+            <Button x:Name="LoadFileBtn" Content="Load" Width="170" Margin="15" Height="25" Click="LoadFileBtn_Click"></Button>
             <Button x:Name="SearchBtn" Content="Save" Width="170" Margin="15" Height="25" Click="SaveBtn_Click"></Button>
         </StackPanel>
         </WrapPanel>

@@ -184,7 +184,8 @@ namespace CSLab3
             using FileStream openStream = File.OpenRead("Bookinglist.json");
             List<Bookings> getBookinglist =
                  await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
-            bookingBox.ItemsSource = getBookinglist;
+            bookingList = getBookinglist;
+            bookingBox.ItemsSource= bookingList;
 
         }
 

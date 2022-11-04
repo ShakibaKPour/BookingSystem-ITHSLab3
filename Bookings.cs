@@ -20,6 +20,12 @@ namespace CSLab3
             this.TableNumber = tableNum;
             this.Time = time;
         }
+
+        public Bookings()
+        {
+
+        }
+
         public override string ToString()
         {
             string dateOnly = Date.ToShortDateString();

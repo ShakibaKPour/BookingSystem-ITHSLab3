@@ -13,7 +13,6 @@ namespace CSLab3
     {
         public static async Task SerialFileAsync(List<Bookings> list)
         {
-            await Task.Delay(5000);
             string fileName = "Bookinglist.json";
             using FileStream createStream = File.Create(fileName);
             await JsonSerializer.SerializeAsync(createStream, list);

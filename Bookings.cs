@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSLab3
 {
-    public class Bookings
+    public class Bookings : IBookingSystem
     {
         public string Name { get; set; }
         public DateTime Date { get; set; }

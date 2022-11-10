@@ -39,11 +39,8 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Margin="10">
             <Label Content="Datum" Margin="15,15,15,5" Width="auto" HorizontalAlignment="Center"/>
-            <Calendar x:Name="myCalendar" Margin="15" SelectionMode="SingleDate" 
+                <Calendar x:Name="myCalendar" Margin="15" SelectionMode="SingleDate" 
                     IsTodayHighlighted="true" SelectedDatesChanged="myCalendar_SelectedDatesChanged">
-                    <!--<Calendar.BlackoutDates>
-                        <CalendarDateRange Start: End=""/>
-                    </Calendar.BlackoutDates>-->
                 <Calendar.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
                         <GradientStop Color="LightSalmon" Offset="0.1" />

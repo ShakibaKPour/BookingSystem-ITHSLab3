@@ -27,24 +27,20 @@ namespace CSLab3
     /// </summary>
     public partial class MainWindow : Window
     {
-     
+        public string FileName;
+
         List<Bookings> bookingList = new List<Bookings>();
 
         List<Tables> table = new List<Tables>();
 
-        public string FileName;
-
-        //List<Tables> availableTableList = new List<Tables>();
-        //List<Tables> bookedTableList = new List<Tables>();
-
         public MainWindow()
         {
             InitializeComponent();
-            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022,11,10), "1", "19.00 - 21.00"));
-            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022,11,10), "4", "20.00 - 22.00"));
-            bookingList.Add(new Bookings("Viktor George", new DateTime(2022,11,10), "2", "18.00 - 20.00"));
+            bookingList.Add(new Bookings("Shakiba Pour", new DateTime(2022, 11, 29), "1", "19.00 - 21.00"));
+            bookingList.Add(new Bookings("Sara Nilsson", new DateTime(2022, 11, 27), "4", "20.00 - 22.00"));
+            bookingList.Add(new Bookings("Viktor George", new DateTime(2022, 11, 30), "2", "18.00 - 20.00"));
             UpdateContent();
-            TableListCBContent();
+            TableListContent();
             TimeListContent();
             EnableButton();
         }
@@ -63,15 +59,19 @@ namespace CSLab3
             bookingBox.ItemsSource = null;
             bookingBox.ItemsSource = bookingList;
 
-            // Make a backup text file any time the listbox is updated
-            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            //foreach (object item in bookingBox.Items)
-            //{
-            //    sb.Append(item.ToString());
-            //    sb.Append("\n");
-            //}
+            WriteToFile();
+        }
 
-            //File.WriteAllText(@"BookigListFile.txt", sb.ToString());
+        private void WriteToFile()
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            foreach (object item in bookingBox.Items)
+            {
+                sb.Append(item.ToString());
+                sb.Append("\n");
+            }
+
+            File.WriteAllText(@"BookigListFile.txt", sb.ToString());
         }
 
         private void ClearContent()
@@ -82,7 +82,7 @@ namespace CSLab3
             TableNumCB.SelectedItem = null;
         }
 
-            private void TableListCBContent()
+        private void TableListContent()
         {
             for (int i = 1; i < 11; i++)
             {
@@ -104,17 +104,6 @@ namespace CSLab3
             }
         }
 
-        private void ValidateName()   //Regex is not working
-        {
-            Regex r = new Regex(@"[a - z]|[A-Z]*");
-            if (!r.IsMatch(customerName.Text))
-            {
-                MessageBox.Show("Please insert your name");
-                customerName.Text = null;
-                return;
-            }
-        }
-
         private void ValidateCalender()
         {
             if (myCalendar.SelectedDate < DateTime.Today)
@@ -124,29 +113,38 @@ namespace CSLab3
             }
         }
 
+
+        //private void ValidateName()
+        //{
+        //    Regex r = new Regex("^[a - zA - Z]$");
+        //    if (!r.IsMatch(customerName.Text))
+        //    {
+        //        MessageBox.Show("Please insert your name");
+        //        customerName.Text = null;
+        //        return;
+        //    }
+        //}
+
+
         private void bookingBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 string name = customerName.Text;
-                ValidateName();
+                //ValidateName();
 
                 ValidateCalender();
                 DateTime date = (DateTime)myCalendar.SelectedDate;
-                
 
                 string tableNumber = TableNumCB.SelectedItem.ToString();
 
                 var time = timepicker.SelectedItem.ToString();
-
-                var endofbookedtime = timepicker.SelectedItem + 2.00.ToString();
 
                 foreach (var booking in bookingList)
                 {
                     if (tableNumber == booking.TableNumber &&
                         date == booking.Date &&
                         time == booking.Time)
-
                     {
                         MessageBox.Show("This table is already booked on that date and time. " +
                             "Please try another combination!");
@@ -156,9 +154,7 @@ namespace CSLab3
 
                 }
 
-                
-
-                bookingList.Add(new Bookings(name, date , tableNumber, time));
+                bookingList.Add(new Bookings(name, date, tableNumber, time));
 
                 UpdateContent();
 
@@ -172,11 +168,12 @@ namespace CSLab3
                 MessageBox.Show("Something went wrong! Please try again.");
             }
         }
- 
+
         private void CancelingBtn_Click(object sender, RoutedEventArgs e)
         {
             if (bookingBox.SelectedItem == null)
                 return;
+
             bookingList.RemoveAt(bookingBox.Items.IndexOf(bookingBox.SelectedItem));
             UpdateContent();
             MessageBox.Show("Bokningen har borttagen!");
@@ -187,8 +184,6 @@ namespace CSLab3
 
             if (!File.Exists(FileName))
             {
-                //    //MessageBox.Show("There is no serilaized file to load");
-                //    //return;
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                 dlg.FileName = "BookingListFile";
                 dlg.DefaultExt = ".json";
@@ -207,20 +202,15 @@ namespace CSLab3
             }
             else
             {
-
-
                 string filename = "BookingListFile.json";
                 using FileStream openStream = File.OpenRead(filename);
                 List<Bookings> getBookinglist =
                      await JsonSerializer.DeserializeAsync<List<Bookings>>(openStream);
                 bookingList = getBookinglist;
                 bookingBox.ItemsSource = bookingList;
-
-                
-           }
+            }
 
         }
-
 
         private async void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -244,7 +234,6 @@ namespace CSLab3
             }
             else
             {
-
                 string fileName = "BookingListFile.json";
                 using FileStream createStream = File.Create(fileName);
                 await JsonSerializer.SerializeAsync(createStream, bookingList);
